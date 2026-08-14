@@ -1,0 +1,144 @@
+(footprint "JST_B3B-PH_HEADER"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "3-pin JST PH Shrouded Header <br>\n2.0mm pitch <br>\nP/N B3B-PH-K-S.  Mating plug PHR-3 <br>")
+	(property "Reference" "JST_PH_3_PIN"
+		(at -3.9725 -2.6825 0)
+		(layer "F.SilkS")
+		(uuid "8cd481b4-390e-4ac5-b2e6-b3f6c5f27d03")
+		(effects
+			(font
+				(size 0.77216 0.77216)
+				(thickness 0.065024)
+			)
+			(justify left bottom)
+		)
+	)
+	(property "Value" "Val**"
+		(at -1 4 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "8620ca3b-41b4-46ff-8336-cc184751f6e0")
+		(effects
+			(font
+				(size 1.524 1.524)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "413f3ab9-bbca-461b-9ea0-ec61ec422219")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "fcb06f41-3c73-41b5-83ae-56c9cba418fc")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(attr through_hole)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -3.9225 -2.3825)
+		(end 3.9275 -2.3825)
+		(stroke
+			(width 0.127)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "1b739c09-f746-4dff-86ef-012452ce60db")
+	)
+	(fp_line
+		(start -3.9225 2.1175)
+		(end -3.9225 -2.3825)
+		(stroke
+			(width 0.127)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "d5a52969-3192-4ae8-98ee-ce3538cb0906")
+	)
+	(fp_line
+		(start 3.9275 -2.3825)
+		(end 3.9275 2.1175)
+		(stroke
+			(width 0.127)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "cca054ea-7649-4286-8831-5c5ce00e39c5")
+	)
+	(fp_line
+		(start 3.9275 2.1175)
+		(end -3.9225 2.1175)
+		(stroke
+			(width 0.127)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "f5e1e880-6483-474b-bdbc-1195bc7c9373")
+	)
+	(fp_poly
+		(pts
+			(xy -1.9725 2.1175) (xy 2.0275 2.1175) (xy 2.0275 1.6175) (xy -1.9725 1.6175)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.SilkS")
+		(uuid "30b17523-0e99-4cc8-ae9b-638a637bab79")
+	)
+	(fp_text user "1"
+		(at 2.145 1.635 0)
+		(layer "F.SilkS")
+		(uuid "b21125e2-65d7-4154-83d3-b1f8c6dcfb80")
+		(effects
+			(font
+				(size 0.77216 0.77216)
+				(thickness 0.065024)
+			)
+			(justify left bottom)
+		)
+	)
+	(pad "1" thru_hole oval
+		(at 2.0275 -0.0475 90)
+		(size 2.616 1.308)
+		(drill 0.8)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "f2437c42-95c9-4d2f-b95b-2d04b731b8ce")
+	)
+	(pad "2" thru_hole oval
+		(at 0.0275 -0.0475 90)
+		(size 2.616 1.308)
+		(drill 0.8)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "8c72a9c0-08e3-4f58-8e12-c220e7765078")
+	)
+	(pad "3" thru_hole oval
+		(at -1.9725 -0.0475 90)
+		(size 2.616 1.308)
+		(drill 0.8)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "914c69e3-ff5f-4d13-9334-d88af46dc2a1")
+	)
+	(embedded_fonts no)
+)

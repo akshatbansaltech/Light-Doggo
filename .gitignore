@@ -1,0 +1,19 @@
+# firmware build artifacts
+build/
+output/
+*.o
+*.elf
+*.hex
+*.map
+
+# kicad backups
+*.bak
+*.bck
+*-backup/
+
+# os junk
+Thumbs.db
+.DS_Store
+
+# kicad local history
+.history/

@@ -1,0 +1,139 @@
+(footprint "TantalC_SizeD_EIA-7343_Reflow"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "Tantal Cap. , Size D, EIA-7343, Reflow")
+	(tags "Tantal Capacitor Size-D EIA-7343 Reflow")
+	(property "Reference" "C_M1"
+		(at -0.20066 -3.29946 0)
+		(layer "F.SilkS")
+		(uuid "bcefe750-0729-4db6-aefb-3312d21c4b19")
+		(effects
+			(font
+				(size 0.75 0.75)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "220uF"
+		(at -0.09906 3.59918 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4387ca5a-8527-44d4-9012-3a09eaac6817")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2fcc78f6-be46-4c60-ac56-f6d14cdc4af2")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1068e46a-92f1-4ff8-9d86-0973298a5cfc")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -4.2 2.2)
+		(end 3.8 2.2)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "82e31b1b-5719-4c44-bcf1-a9a456c7e036")
+	)
+	(fp_line
+		(start 3.8 -2.2)
+		(end -4.3 -2.2)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "64f71c4d-7dbe-4d9f-a9ec-978b43d1f2d9")
+	)
+	(fp_line
+		(start -4.6 -2.6)
+		(end -4.6 2.6)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "6f3c5b20-5341-4980-8a5e-4f31e32ea7b9")
+	)
+	(fp_line
+		(start -4.6 2.6)
+		(end 4.6 2.6)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "3a9eea58-5134-4d35-9598-1ae3beb1e324")
+	)
+	(fp_line
+		(start 4.6 -2.6)
+		(end -4.6 -2.6)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "17534962-bc31-4a40-9043-2ebbd725769f")
+	)
+	(fp_line
+		(start 4.6 2.6)
+		(end 4.6 -2.6)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "6f150822-1b80-4c55-b8ce-4aac5ff01cce")
+	)
+	(pad "1" smd rect
+		(at -3.12 0)
+		(size 2.37 2.43)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "7780fbb3-0c48-4cea-9ec4-bf6fc9b52bc3")
+	)
+	(pad "2" smd rect
+		(at 3.12 0)
+		(size 2.37 2.43)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "e534d85c-d726-48d7-9e5c-3308cc2a90e7")
+	)
+	(embedded_fonts no)
+	(model "Capacitors_Tantalum_SMD.3dshapes/TantalC_SizeD_EIA-7343_Reflow.wrl"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 180)
+		)
+	)
+)
