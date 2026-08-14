@@ -1,5 +1,5 @@
 #!/bin/bash
-source /home/vagrant/wolfiemouse/tools/vagrant/config.sh
+source /home/vagrant/miceymousey/tools/vagrant/config.sh
 
 # Ubuntu Vagrant box doesn't have USB serial kernel modules by default.
 # I manually compiled the corresponding kernel modules to enable them.
@@ -8,11 +8,11 @@ source /home/vagrant/wolfiemouse/tools/vagrant/config.sh
 sudo apt-get update && sudo apt-get install -y build-essential linux-headers-$(uname -r)
 sudo apt-get update && sudo apt-get install -y rsync
 
-WOLFIE_DIR=$(pwd)/wolfiemouse
+MM_DIR=$(pwd)/wolfiemouse
 PRV_DIR=$(pwd)
 
 # Build kernel modules
-cd $WOLFIE_DIR/tools/vagrant/ubuntu-xenial-kernel-source
+cd $MM_DIR/tools/vagrant/ubuntu-xenial-kernel-source
 make
 
 # Copy compiled .ko modules

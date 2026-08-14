@@ -1,5 +1,5 @@
 #!/bin/bash
-source /home/vagrant/wolfiemouse/tools/vagrant/config.sh
+source /home/vagrant/miceymousey/tools/vagrant/config.sh
 
 # append .bashrc
 echo -e "\n\nConfiguring zsh..."

@@ -5,8 +5,8 @@
  *      Author: Bumsik Kim
  */
 
-#ifndef BSP_WOLFIEMOUSE_KB_MODULE_CONFIG_H_
-#define BSP_WOLFIEMOUSE_KB_MODULE_CONFIG_H_
+#ifndef BSP_MICEYMOUSEY_KB_MODULE_CONFIG_H_
+#define BSP_MICEYMOUSEY_KB_MODULE_CONFIG_H_
 
 // Push button settings
 #define B1_PORT 		PORTB
@@ -114,4 +114,4 @@
 #define EMITTER_FL_PIN      GPIO_PIN_1
 
 
-#endif /* BSP_WOLFIEMOUSE_KB_MODULE_CONFIG_H_ */
+#endif /* BSP_MICEYMOUSEY_KB_MODULE_CONFIG_H_ */

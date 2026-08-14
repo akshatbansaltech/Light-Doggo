@@ -7,7 +7,7 @@ all: welcome
 	@exit 1
 
 welcome:
-	@echo "Welcome to Wolfiemouse!"
+	@echo "Welcome to MiceyMousey!"
 	@echo ""
 	@echo "You should run 'make' in application's directory instead."
 	@echo "    e.g. /firmware/blinky_nucleo64"

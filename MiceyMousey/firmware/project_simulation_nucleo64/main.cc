@@ -65,7 +65,7 @@ static void task_1_mouse_simulation ()
     // mazeString is located in mazeString.hpp
     static SimulMouse virtualMouse(const_cast<Maze::StringMaze *>(&mazeString), &fakeIO, &fakeIO);
 
-    enum WolfieState {
+    enum MiceyState {
         goGoal  = 0,
         goStart = 1,
         explore = 2

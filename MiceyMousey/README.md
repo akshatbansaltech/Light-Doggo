@@ -1,6 +1,6 @@
 # MiceyMousey
 
-**MiceyMousey** is a micromouse — a self-driving maze-solving robot — built from kbumsik's [WolfieMouse](https://github.com/kbumsik/WolfieMouse) (2nd place, IEEE Region 1 Micromouse 2019). It runs a custom STM32F446 PCB with hand-drawn symbols and footprints, FreeRTOS firmware with its own flood-fill maze solver, IR range sensors, motor encoders, and a debug display.
+**MiceyMousey** is a micromouse — a self-driving maze-solving robot — based on kbumsik's open-source micromouse project (2nd place, IEEE Region 1 Micromouse 2019, GPLv2.1: https://github.com/kbumsik/WolfieMouse). It runs a custom STM32F446 PCB with hand-drawn symbols and footprints, FreeRTOS firmware with its own flood-fill maze solver, IR range sensors, motor encoders, and a debug display.
 
 ## Features
 
@@ -18,14 +18,14 @@
 | File | What it is |
 |------|-----------|
 | [MiceyMousey.kicad_sch](MiceyMousey.kicad_sch) | Schematic (blank — rebuild with the custom symbols, see reference/) |
-| [MiceyMousey.kicad_pcb](MiceyMousey.kicad_pcb) | Board layout (wolfie's original, loads in KiCad 10) |
+| [MiceyMousey.kicad_pcb](MiceyMousey.kicad_pcb) | Board layout (original competition board, loads in KiCad 10) |
 | [lib/](lib/) | 26 custom symbols + 27 custom footprints |
-| [reference/](reference/) | WolfieMouse's original 2017 schematic files (legacy format, read-only) |
+| [reference/](reference/) | Original 2017 schematic files (legacy format, read-only) |
 | [production/](production/) | Original gerber zips from the competition board |
 | [3D_Model/](3D_Model/) | Wheels, skate, motor seat, sensor housing STLs |
 | [firmware/](firmware/) | C++ firmware (FreeRTOS + maze solver) |
 | [simulation/](simulation/) | Maze solver simulator |
-| [docs/](docs/) | Original WolfieMouse documentation |
+| [docs/](docs/) | Original documentation |
 | [tools/](tools/) | Sensor data tools + Vagrant build env |
 | [BOM.xlsx](BOM.xlsx) | Component BOM |
 
@@ -46,12 +46,12 @@ Full list with exact part numbers in [BOM.xlsx](BOM.xlsx).
 
 ## Firmware
 
-The firmware runs FreeRTOS on the STM32F446. It's the original WolfieMouse code — maze solving, PID speed control, and sensor handling live in `firmware/src/`. Build needs the GNU ARM toolchain (or the provided Vagrant env).
+The firmware runs FreeRTOS on the STM32F446. It's the original competition code — maze solving, PID speed control, and sensor handling live in `firmware/src/`. Build needs the GNU ARM toolchain (or the provided Vagrant env).
 
 | Module | What it does |
 |--------|-------------|
 | `src/maze/` | Maze representation, flood-fill solver, position controller |
-| `src/board/wolfiemouse/` | Motor, encoder, range sensor drivers |
+| `src/board/miceymousey/` | Motor, encoder, range sensor drivers |
 | `src/module/` | Control loop, display, logging |
 
 ## Building it
@@ -77,4 +77,4 @@ The firmware runs FreeRTOS on the STM32F446. It's the original WolfieMouse code 
 
 ## Credits
 
-Based on [kbumsik/WolfieMouse](https://github.com/kbumsik/WolfieMouse) — IEEE Region 1 Micromouse 2018/2019 — licensed GPLv2.1. Huge thanks to kbumsik for open-sourcing the whole thing: PCB, firmware, and docs.
+Based on [kbumsik's micromouse project](https://github.com/kbumsik/WolfieMouse) — IEEE Region 1 Micromouse 2018/2019 — licensed GPLv2.1. Huge thanks to kbumsik for open-sourcing the whole thing: PCB, firmware, and docs.

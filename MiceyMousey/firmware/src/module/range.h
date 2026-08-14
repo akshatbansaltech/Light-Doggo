@@ -5,8 +5,8 @@
  *      Author: Bumsik Kim
  */
 
-#ifndef SRC_BOARD_WOLFIEMOUSE_RANGE_H_
-#define SRC_BOARD_WOLFIEMOUSE_RANGE_H_
+#ifndef SRC_BOARD_MICEYMOUSEY_RANGE_H_
+#define SRC_BOARD_MICEYMOUSEY_RANGE_H_
 
 #include "common_source.h"
 

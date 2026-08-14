@@ -2,7 +2,7 @@
 # Project build settings
 #######################################
 # Project name
-TARGET = competition_wolfiemouse
+TARGET = competition_miceymousey
 
 # debug build?
 DEBUG = 1
@@ -15,7 +15,7 @@ VERBOSE = 0
 # Hardware
 #######################################
 # board: Should be one of /firmware/src/baord
-BOARD = wolfiemouse
+BOARD = miceymousey
 
 # One of GCC flags
 CPU_FLAG = -mcpu=cortex-m4

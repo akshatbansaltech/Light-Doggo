@@ -2,7 +2,7 @@
 
 * Design reference: [Project Futura](http://micromouseusa.com/?page_id=1342)
 
-## WolfieMouse v1.0
+## MiceyMousey v1.0
 
 The basic ideas of our first mouse is following:
 
@@ -25,7 +25,7 @@ To observe the ideas above, the micromouse features:
 * 5:1 Micro Metal Gearmotor HP by Polou *2
   * AS5304A magnetic encoder & AS5000-MR20-44 magnetic ring combo for rotary encoder of each motors
 
-### Gallery of WolfieMouse 1.0
+### Gallery of MiceyMousey 1.0
 
 Schematic overview. See the whole schemetic [here (PDF).](hardware_design/schematic_2017_Feb.pdf) 
 
@@ -35,7 +35,7 @@ PCB Footprint overview. Use [KiCad](http://kicad-pcb.org/) and open `hardware` d
 
 ![pcb_overview](hardware_design/Footprint_2017_Feb.jpg)
 
-## WolfieMouse v2.0
+## MiceyMousey v2.0
 
 ### What need to fixed from v1.0
 

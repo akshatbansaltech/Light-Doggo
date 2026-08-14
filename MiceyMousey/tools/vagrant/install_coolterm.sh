@@ -1,5 +1,5 @@
 #!/bin/bash
-source /home/vagrant/wolfiemouse/tools/vagrant/config.sh
+source /home/vagrant/miceymousey/tools/vagrant/config.sh
 
 sudo apt-get install -y wget unzip
 sudo apt-get install -y libgtk-3-0 libunwind-dev

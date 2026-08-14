@@ -1,6 +1,6 @@
 # MiceyMousey
 
-a micromouse robot project — fork of kbumsik's wolfiemouse (IEEE region 1 micromouse winner, GPLv2.1: https://github.com/kbumsik/WolfieMouse)
+a micromouse robot project — maze-solving robot with custom stm32f446 pcb + freertos firmware (GPLv2.1, based on kbumsik's open-source micromouse: https://github.com/kbumsik/WolfieMouse)
 
 - custom stm32f446 pcb + 26 custom symbols + 27 custom footprints
 - freeRTOS firmware with own maze-solving algorithm

@@ -46,7 +46,7 @@
     * This is a virtual machine installation command. Requires around 8GB.
     * This will take at least 20 minutes. Have a cup of coffee :)
 4. After successful install, connect to the machine via SSH using MobaXterm. [(Video)](https://youtu.be/jf9KIUKjGEk)
-5. `$ cd ~/wolfiemouse`. This is our project root directory.
+5. `$ cd ~/miceymousey`. This is our project root directory.
 
 ### Regular setup without virtual machine (when virtual machine not working properly)
 
@@ -114,14 +114,14 @@ Reference: https://help.github.com/articles/syncing-a-fork/
 
 ### Set up your repository
 
-* Fork our github repo https://github.com/kbumsik/WolfieMouse
+* Fork our github repo (original: kbumsik's micromouse project)
 * Clone your forked repo. e.g:
 
-> $ git clone --recursive https://github.com/{your-id}/WolfieMouse
+> $ git clone --recursive https://github.com/{your-id}/MiceyMousey
 
 * Add our repo as a new remote `upstream`
 
-> $ git remote add upstream https://github.com/kbumsik/WolfieMouse
+> $ git remote add upstream https://github.com/kbumsik/WolfieMouse  # original project (GPLv2.1)
 
 ### Make new change input your repository
 

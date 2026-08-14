@@ -1,4 +1,4 @@
-# WolfieMouse Report Feb, 2017
+# MiceyMousey Report Feb, 2017
 
 ## How Was 2016 Micromouse Competition
 
@@ -39,7 +39,7 @@ improved design.
 * Adopt better alorithm.
 * Actual test on the maze in our lab.
 
-## WolfieMouse need help!
+## MiceyMousey need help!
 
 This project has been done by one person. However, this project _cannot_ be done by
 one person. I need your help. If you participate you can learn the following but

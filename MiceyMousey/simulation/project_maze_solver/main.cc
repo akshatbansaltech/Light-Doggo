@@ -27,7 +27,7 @@ int main()
 {
     StdIO fileIO(true);
     StdIO printIO(false);
-    enum WolfieState {
+    enum MiceyState {
         goGoal  = 0,
         goStart = 1,
         explore = 2

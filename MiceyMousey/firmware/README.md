@@ -6,7 +6,7 @@ This directory contains common source code. For project-sepicific code, go to
 ## Directory description
 
 * `kb_lib`: Home-brewed hardware driver library.
-* `bsp_kb_lib`: WolfieMouse hardware support codes associated with `kb_lib`.
-* `math`: Mathmatics codes used in WolfieMouse.
+* `bsp_kb_lib`: MiceyMousey hardware support codes associated with `kb_lib`.
+* `math`: Mathmatics codes used in MiceyMousey.
 * `maze`: Contains maze-solving algorithm, written in C++.
  
