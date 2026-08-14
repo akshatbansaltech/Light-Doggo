@@ -1,23 +1,80 @@
 # MiceyMousey
 
-everything from the wolfiemouse repo (kbumsik's IEEE region 1 micromouse, GPLv2.1 — https://github.com/kbumsik/WolfieMouse), restructured like pokeyboardy.
+**MiceyMousey** is a micromouse — a self-driving maze-solving robot — built from kbumsik's [WolfieMouse](https://github.com/kbumsik/WolfieMouse) (2nd place, IEEE Region 1 Micromouse 2019). It runs a custom STM32F446 PCB with hand-drawn symbols and footprints, FreeRTOS firmware with its own flood-fill maze solver, IR range sensors, motor encoders, and a debug display.
 
-## layout
+## Features
 
-- `MiceyMousey.kicad_pro` / `.kicad_sch` / `.kicad_pcb` — the live kicad project (open the .kicad_pro)
-- `lib/symbols/` — 26 custom symbols converted to modern .kicad_sym (legacy format from 2017 won't load in kicad 10, hence conversion)
-- `lib/footprints_micromouse.pretty/` — 27 custom footprints, converted to modern format
-- `reference/` — wolfie's original 2017 schematic files (legacy format, kicad 10 can't open em — read-only reference)
-- `production/` — the original CAM/gerber zips (fab reference)
-- `3D_Model/` — wheels, skate, motor seat, sensor housing stls
-- `firmware/` — original c++ firmware (freeRTOS + own maze solver)
-- `simulation/` — algorithm simulator
-- `tools/` — vagrant env, sensor data tools
-- `docs/` — original documentation (read these, they're gold)
-- `BOM.xlsx` — the shopping list
+- STM32F446RE (Cortex-M4, 180 MHz)
+- 2x DC motors with quadrature encoders
+- MAX14871 motor driver
+- MPU-9250 9-axis IMU
+- VL6180X time-of-flight range sensors
+- TCA9545A I2C multiplexer
+- HCMS-2901 4-digit display
+- FreeRTOS + own maze-solving algorithm
 
-## notes
+## Contents
 
-- the original `.kicad_pcb` still loads fine in kicad 10 (zones convert best-effort) — but if u edit it, save-as creates the modern format
-- schematic is blank on purpose — rebuild it with the converted symbols; original sch lives in `reference/` for copying symbol placement
-- keep the GPLv2.1 credit in this readme if u ever share it
+| File | What it is |
+|------|-----------|
+| [MiceyMousey.kicad_sch](MiceyMousey.kicad_sch) | Schematic (blank — rebuild with the custom symbols, see reference/) |
+| [MiceyMousey.kicad_pcb](MiceyMousey.kicad_pcb) | Board layout (wolfie's original, loads in KiCad 10) |
+| [lib/](lib/) | 26 custom symbols + 27 custom footprints |
+| [reference/](reference/) | WolfieMouse's original 2017 schematic files (legacy format, read-only) |
+| [production/](production/) | Original gerber zips from the competition board |
+| [3D_Model/](3D_Model/) | Wheels, skate, motor seat, sensor housing STLs |
+| [firmware/](firmware/) | C++ firmware (FreeRTOS + maze solver) |
+| [simulation/](simulation/) | Maze solver simulator |
+| [docs/](docs/) | Original WolfieMouse documentation |
+| [tools/](tools/) | Sensor data tools + Vagrant build env |
+| [BOM.xlsx](BOM.xlsx) | Component BOM |
+
+## BOM
+
+| Reference | Value | Footprint | Qty |
+|-----------|-------|-----------|-----|
+| U1 | STM32F446RE | footprints_micromouse:STM32F446_LQFP64 | 1 |
+| U2 | MAX14871 motor driver | footprints_micromouse:... | 1 |
+| U3 | MPU-9250 IMU | footprints_micromouse:MPU-9250 | 1 |
+| U4 | TCA9545A I2C mux | footprints_micromouse:... | 1 |
+| U5, U6 | TPS73633 / TPS76850 LDOs | footprints_micromouse:... | 2 |
+| DISP1 | HCMS-2901 display | footprints_micromouse:HCMS-2903 | 1 |
+| X1, X2 | VL6180X range sensors | footprints_micromouse:VL6180X_POLOLU... | 2 |
+| M1, M2 | Geared DC motors w/ encoders | footprints_micromouse:... | 2 |
+
+Full list with exact part numbers in [BOM.xlsx](BOM.xlsx).
+
+## Firmware
+
+The firmware runs FreeRTOS on the STM32F446. It's the original WolfieMouse code — maze solving, PID speed control, and sensor handling live in `firmware/src/`. Build needs the GNU ARM toolchain (or the provided Vagrant env).
+
+| Module | What it does |
+|--------|-------------|
+| `src/maze/` | Maze representation, flood-fill solver, position controller |
+| `src/board/wolfiemouse/` | Motor, encoder, range sensor drivers |
+| `src/module/` | Control loop, display, logging |
+
+## Building it
+
+1. Source all parts from BOM.xlsx
+2. Fabricate the PCB from production/ gerbers (or redesign — the .kicad_pcb is editable)
+3. Print the 3D parts from 3D_Model/
+4. Solder the board, wire motors + sensors
+5. Flash the firmware with an ST-Link (or use the Vagrant env to build)
+6. Drop it in a 16x16 maze and let it run
+
+## Schematic
+
+<img src="docs/images/schematic.png" alt="Schematic" width="400"/>
+
+## PCB
+
+<img src="docs/images/pcb_footprint.png" alt="PCB" width="400"/>
+
+## Simulation
+
+<img src="docs/images/simulation_screen.png" alt="Simulation" width="400"/>
+
+## Credits
+
+Based on [kbumsik/WolfieMouse](https://github.com/kbumsik/WolfieMouse) — IEEE Region 1 Micromouse 2018/2019 — licensed GPLv2.1. Huge thanks to kbumsik for open-sourcing the whole thing: PCB, firmware, and docs.
