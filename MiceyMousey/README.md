@@ -1,6 +1,6 @@
 # MiceyMousey
 
-**MiceyMousey** is a micromouse — a self-driving maze-solving robot — based on kbumsik's open-source micromouse project (2nd place, IEEE Region 1 Micromouse 2019, GPLv2.1: https://github.com/kbumsik/WolfieMouse). It runs a custom STM32F446 PCB with hand-drawn symbols and footprints, FreeRTOS firmware with its own flood-fill maze solver, IR range sensors, motor encoders, and a debug display.
+**MiceyMousey** is a micromouse — a self-driving maze-solving robot — based on an open-source IEEE Region 1 Micromouse competition project (2019, GPLv2.1). It runs a custom STM32F446 PCB with hand-drawn symbols and footprints, FreeRTOS firmware with its own flood-fill maze solver, IR range sensors, motor encoders, and a debug display.
 
 ## Features
 
@@ -77,4 +77,4 @@ The firmware runs FreeRTOS on the STM32F446. It's the original competition code 
 
 ## Credits
 
-Based on [kbumsik's micromouse project](https://github.com/kbumsik/WolfieMouse) — IEEE Region 1 Micromouse 2018/2019 — licensed GPLv2.1. Huge thanks to kbumsik for open-sourcing the whole thing: PCB, firmware, and docs.
+Based on an open-source IEEE Region 1 Micromouse competition project (2018/2019, GPLv2.1). Huge thanks to its author for open-sourcing the whole thing: PCB, firmware, and docs.

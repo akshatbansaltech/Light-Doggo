@@ -121,7 +121,7 @@ Reference: https://help.github.com/articles/syncing-a-fork/
 
 * Add our repo as a new remote `upstream`
 
-> $ git remote add upstream https://github.com/kbumsik/WolfieMouse  # original project (GPLv2.1)
+> $ git remote add upstream <original-repo-url>  # if you keep the original as upstream (GPLv2.1)
 
 ### Make new change input your repository
 

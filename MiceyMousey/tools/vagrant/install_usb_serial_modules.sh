@@ -8,7 +8,7 @@ source /home/vagrant/miceymousey/tools/vagrant/config.sh
 sudo apt-get update && sudo apt-get install -y build-essential linux-headers-$(uname -r)
 sudo apt-get update && sudo apt-get install -y rsync
 
-MM_DIR=$(pwd)/wolfiemouse
+MM_DIR=$(pwd)/miceymousey
 PRV_DIR=$(pwd)
 
 # Build kernel modules
