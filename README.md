@@ -3,9 +3,6 @@
 
 Light Doggo is a DIY quadruped robot using 'low cost' BLDC motors.
 
-[Video of kinematic poses](https://youtu.be/AJn_wCcWlwo)
-
-[Video of walking, turning, strafing](https://youtu.be/YjTVNw8BXlM)
 
 ## Basic Specifications
 
@@ -16,14 +13,13 @@ Light Doggo is a DIY quadruped robot using 'low cost' BLDC motors.
 - 6s Li-Ion battery, ~72wH
 - 4.5kg
 
-ElectroPup's control system is coded in Python. 
+Light Doggo's control system is coded in Python. 
 
 # Docs
 
 See the docs directory for a setup guide, bill of materials (BOM), 3D printed parts info, and miscellaneous design notes.
 
 # UI
-
 
 The UI shows the status of the entire system: quadruped joint positions, subsystem status, motor information, inputs, sensors, loop times, etc. The above image shows the simulated quadruped overlapped with real quadruped (based on motor feedback).
 
@@ -221,7 +217,7 @@ This is a general improvement list for future updates or revisions.
 - add a tail
 - add voltage/current sensor (such as an INA228)
 - remove STM32 from aux board and use RPI directly for buzzer, LCD, etc.
-- create a [MPC](https://en.wikipedia.org/wiki/Model_predictive_control) controller
+
 
 
 
