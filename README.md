@@ -9,7 +9,7 @@ Light Doggo is a DIY quadruped robot using 'low cost' BLDC motors.
 * Auxiliary board w/LCD display
 * 9-axis accelerometer/gyro sensor
 * 6s Li-Ion battery, ~72wH
-* 4.5kg
+
 
 Light Doggo's control system is coded in Python.
 
@@ -57,7 +57,7 @@ The `ElectroPup.xml` currently does not have approximate masses or inertial so t
 
 ## PCBs
 
-PCBs are designed in KiCad v8.
+PCBs are designed in KiCad v8(is compatible with KiCad v10 or higher).
 
 ### Power Carrier
 
@@ -216,4 +216,9 @@ This is a general improvement list for future updates or revisions.
 # License
 
 This project is licensed under the [MIT License](LICENSE).
+
+#Credits
+
+All the fundings will be allocated by Hack Club.
+Thank you Star Dance and Hack Club for their absolute support while making Light Doggo!
 
