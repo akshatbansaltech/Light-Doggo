@@ -1,41 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Light Doggo</title>
-<style>
-body { font-family: Arial, sans-serif; background:#0f1115; color:#eee; margin:0; }
-header { padding:25px 8%%; border-bottom:1px solid #292d35; }
-main { max-width:900px; margin:100px auto; padding:25px; }
-h1 { font-size:60px; }
-p { color:#aaa; font-size:18px; line-height:1.7; }
-section { margin-top:80px; }
-a { color:#fff; }
-.card { border:1px solid #292d35; padding:20px; margin:15px 0; border-radius:8px; }
-footer { text-align:center; padding:40px; color:#777; border-top:1px solid #292d35; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Light Doggo</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #0f1115;
+            color: #eeeeee;
+            line-height: 1.6;
+        }
+
+        header {
+            padding: 24px 8%;
+            border-bottom: 1px solid #292d35;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        main {
+            max-width: 950px;
+            margin: auto;
+            padding: 80px 25px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 0 100px;
+        }
+
+        h1 {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #aaaaaa;
+            font-size: 18px;
+        }
+
+        .hero p {
+            max-width: 700px;
+            margin: auto;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 20px;
+            border: 1px solid #444;
+            border-radius: 7px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background: #20242c;
+        }
+
+        section {
+            margin-bottom: 90px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .card {
+            padding: 22px;
+            background: #15181e;
+            border: 1px solid #292d35;
+            border-radius: 10px;
+            color: #dddddd;
+        }
+
+        footer {
+            border-top: 1px solid #292d35;
+            text-align: center;
+            padding: 35px;
+            color: #777777;
+        }
+
+        @media (max-width: 700px) {
+            h1 {
+                font-size: 45px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
+
 <body>
-<header>Light Doggo</header>
+
+<header>
+    <div class="logo">Light Doggo</div>
+</header>
+
 <main>
-<h1>Light Doggo</h1>
-<p>An open-source quadruped robotics software project focused on simulation, kinematics, gait planning, trajectory generation and real-time control.</p>
-<section>
-<h2>About</h2>
-<p>Light Doggo is designed around a simulation-first workflow, allowing robotics software to be developed and tested without continuously depending on physical hardware.</p>
-</section>
-<section>
-<h2>Features</h2>
-<div class="card">Inverse kinematics</div>
-<div class="card">Gait and motion planning</div>
-<div class="card">Trajectory generation</div>
-<div class="card">MuJoCo simulation</div>
-<div class="card">CAN motor interfaces</div>
-<div class="card">Real-time visualization</div>
-</section>
-<p><a href="https://github.com/akshatbansaltech/Light-Doggo">View the project on GitHub </a></p>
+
+    <div class="hero">
+        <h1>Light Doggo</h1>
+
+        <p>
+            An open-source quadruped robotics software project focused on
+            simulation, kinematics, gait planning, trajectory generation,
+            and real-time control.
+        </p>
+
+        <a class="button"
+           href="https://github.com/akshatbansaltech/Light-Doggo">
+            View on GitHub
+        </a>
+    </div>
+
+    <section>
+        <h2>About</h2>
+
+        <p>
+            Light Doggo is designed around a simulation-first workflow,
+            allowing robotics software to be developed and tested without
+            continuously depending on physical hardware.
+        </p>
+    </section>
+
+    <section>
+        <h2>Features</h2>
+
+        <div class="grid">
+            <div class="card">Inverse kinematics</div>
+            <div class="card">Gait and motion planning</div>
+            <div class="card">Trajectory generation</div>
+            <div class="card">MuJoCo simulation</div>
+            <div class="card">CAN motor interfaces</div>
+            <div class="card">Real-time visualization</div>
+        </div>
+    </section>
+
 </main>
-<footer>Light Doggo ú Open-source robotics software</footer>
+
+<footer>
+    Light Doggo Â· Open-source robotics software
+</footer>
+
 </body>
 </html>
