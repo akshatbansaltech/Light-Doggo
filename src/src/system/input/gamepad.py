@@ -1,0 +1,274 @@
+from time import sleep, time
+from typing import Callable, Optional
+from threading import Thread, Event
+from copy import deepcopy
+from math import copysign
+from queue import Queue
+
+from input.gamepad_interface import PS4
+from quadruped.interfaces import Status
+from input.interfaces import InputCommand
+from quadruped.parameters.ik_parameters import IKParameters
+from quadruped.parameters.motion_parameters import MotionParameters
+from utilities.utilities import scale_value
+
+
+"""
+    Converts gamepad inputs into motion parameters ready to be consumed by kinematics calculations.
+
+    Assumes a PS4 controller is used by default; other controllers are possible with code updates.
+
+    Receives inputs from gamepad_inferface via callbacks.
+"""
+
+DPAD_DIRECTION_UP = -1
+DPAD_DIRECTION_LEFT = -1
+DPAD_DIRECTION_CENTER = 0
+DPAD_DIRECTION_DOWN = 1
+DPAD_DIRECTION_RIGHT = 1
+
+class Gamepad:
+    def __init__(self, command_queue: Queue[InputCommand]):
+        self.command_queue = command_queue
+
+        self.ik_parameters = IKParameters()
+        self.motion_parameters = MotionParameters()
+
+        # Find the ID of the connected joystick (gamepad): "ls /dev/input/ | grep js"
+        joystick_number = 0
+        self.gamepad_inferface = PS4(joystick_number)
+
+        # Setup callbacks from the gamepad interface:
+        self.gamepad_inferface.addButtonChangedHandler("TRIANGLE", self.btn_triangle_changed_callback)
+        self.gamepad_inferface.addButtonChangedHandler("CIRCLE", self.btn_circle_changed_callback)
+        self.gamepad_inferface.addButtonChangedHandler("CROSS", self.btn_cross_changed_callback)
+        self.gamepad_inferface.addButtonChangedHandler("SQUARE", self.btn_square_changed_callback)
+        self.gamepad_inferface.addButtonChangedHandler("L1", self.btn_l1_changed_callback)
+        self.gamepad_inferface.addButtonChangedHandler("R1", self.btn_r1_changed_callback)
+        self.gamepad_inferface.addButtonChangedHandler("L2", self.btn_l2_changed_callback)
+        self.gamepad_inferface.addButtonChangedHandler("R2", self.btn_r2_changed_callback)
+        self.gamepad_inferface.addButtonChangedHandler("L3", self.btn_l3_changed_callback)
+        self.gamepad_inferface.addButtonChangedHandler("R3", self.btn_r3_changed_callback)
+        self.gamepad_inferface.addButtonChangedHandler("SHARE", self.btn_share_changed_callback)
+        self.gamepad_inferface.addButtonChangedHandler("OPTIONS", self.btn_options_changed_callback)
+        self.gamepad_inferface.addButtonChangedHandler("PS", self.btn_ps_changed_callback)
+        self.gamepad_inferface.addAxisMovedHandler("L2", self.axis_l2_changed_callback)
+        self.gamepad_inferface.addAxisMovedHandler("R2", self.axis_r2_changed_callback)
+        self.gamepad_inferface.addAxisMovedHandler("LEFT-X", self.axis_left_x_changed_callback)
+        self.gamepad_inferface.addAxisMovedHandler("LEFT-Y", self.axis_left_y_changed_callback)
+        self.gamepad_inferface.addAxisMovedHandler("RIGHT-X", self.axis_right_x_changed_callback)
+        self.gamepad_inferface.addAxisMovedHandler("RIGHT-Y", self.axis_right_y_changed_callback)
+        self.gamepad_inferface.addAxisMovedHandler("DPAD-X", self.axis_dpad_x_changed_callback)
+        self.gamepad_inferface.addAxisMovedHandler("DPAD-Y", self.axis_dpad_y_changed_callback)
+
+        self.no_battery_life_text = "N/A"
+        self.status = Status.STANDBY
+        self.battery_life_percent: float = -1.0
+        self.battery_life_str: str = self.no_battery_life_text
+
+        # State containers
+        self.left_shift: bool = False
+        self.right_shift: bool = False
+
+        # Thread
+        self.thread_handle = None
+        self.exit_event = Event()
+        self.worker_rate_seconds: float = 0.025
+        self.gamepad_last_battery_check_time: float = 0
+        self.gamepad_battery_check_rate_seconds: float = 1.0
+        self.start()
+
+    ###############################################################################
+    # Queue
+    ###############################################################################
+
+    def _send_command(self, command: InputCommand):
+        self.command_queue.put(command)
+
+    ###############################################################################
+    # Callback handlers from Gamepad
+    ###############################################################################
+
+    """ BUTTONS FACE """
+
+    def btn_triangle_changed_callback(self, state):
+        if self.left_shift or self.right_shift:
+            if state == True:
+                self._send_command(InputCommand.WIFI_AS_CLIENT)
+        elif state == True:
+            self._send_command(InputCommand.GAIT_CLIMB)
+
+    def btn_circle_changed_callback(self, state):
+        if state == True:
+            self._send_command(InputCommand.GAIT_TROT)
+
+    def btn_cross_changed_callback(self, state):
+        if self.left_shift or self.right_shift:
+            if state == True:
+                self._send_command(InputCommand.WIFI_AS_HOTSPOT)
+        elif state == True:
+            self._send_command(InputCommand.GAIT_RUN)
+
+    def btn_square_changed_callback(self, state):      
+        if state == True:
+            self._send_command(InputCommand.GAIT_CRAWL)
+
+    """ BUTTONS SHOULDER AND TRIGGER """
+
+    def btn_l1_changed_callback(self, state):
+        self.left_shift = state
+
+    def btn_r1_changed_callback(self, state):
+        self.right_shift = state
+
+    def btn_l2_changed_callback(self, state):
+        if state == True:
+            pass
+
+    def btn_r2_changed_callback(self, state):       
+        if state == True:
+            pass
+
+    def btn_l3_changed_callback(self, state):
+        if state == True:
+            pass
+
+    def btn_r3_changed_callback(self, state):
+        if state == True:
+            pass
+
+    """ BUTTONS MISC """
+
+    def btn_share_changed_callback(self, state):
+        if state == True:
+            self._send_command(InputCommand.DISABLE_ENABLE_MOTORS)
+
+    def btn_options_changed_callback(self, state):
+        if state == True:
+            if self.left_shift or self.right_shift:
+                self._send_command(InputCommand.SHUTDOWN)
+            else:
+                self._send_command(InputCommand.CLEAR_ERRORS)
+
+    def btn_ps_changed_callback(self, state):
+        if state == True:
+            pass
+
+    """ AXIS D_PAD """
+
+    def axis_dpad_x_changed_callback(self, state):
+        if state == DPAD_DIRECTION_LEFT:
+            self._send_command(InputCommand.POSE)
+        elif state == DPAD_DIRECTION_CENTER:
+            pass
+        elif state == DPAD_DIRECTION_RIGHT:
+            self._send_command(InputCommand.WALK)
+
+    def axis_dpad_y_changed_callback(self, state):
+        if state == DPAD_DIRECTION_UP:  
+            self._send_command(InputCommand.STAND)
+        elif state == DPAD_DIRECTION_CENTER:
+            pass
+        elif state == DPAD_DIRECTION_DOWN:          
+            self._send_command(InputCommand.SIT)
+
+
+    """ L2 and R2 Triggers """
+    def axis_l2_changed_callback(self, value):        
+        new = scale_value(value, -1, 1, 0, 1)
+        self.ik_parameters.set_forward_transation_from_axis(new)
+       
+    def axis_r2_changed_callback(self, value):
+        new = scale_value(value, -1, 1, 0, -1)
+        self.ik_parameters.set_forward_transation_from_axis(new)
+
+    """ AXIS JOY-STICKS """
+
+    def axis_left_x_changed_callback(self, value):
+        self.ik_parameters.set_roll_by_axis(value)
+        self.motion_parameters.set_lateral_velocity_by_axis(value)
+
+    def axis_left_y_changed_callback(self, value): 
+        self.ik_parameters.set_pitch_by_axis(value)
+        self.motion_parameters.set_forward_velocity_by_axis(value)
+
+    def axis_right_x_changed_callback(self, value):
+        self.ik_parameters.set_yaw_by_axis(value)
+        self.motion_parameters.set_angular_velocity_by_axis(value)
+
+    def axis_right_y_changed_callback(self, value):  
+        self.ik_parameters.set_height_transition_by_axis(value)
+      
+
+    ###############################################################################
+    # Worker (threaded)
+    ###############################################################################
+
+    def start(self):
+        if not self.thread_handle or not self.thread_handle.is_alive():
+            print("[Gamepad] starting thread")
+            self.thread_handle = Thread(target=self.worker)
+            self.thread_handle.start()
+
+    def stop(self):
+        if self.thread_handle and self.thread_handle.is_alive():
+            print("[Gamepad] stopping thread")
+            self.exit_event.set()
+            self.thread_handle.join()
+            self.gamepad_inferface.disconnect()
+
+    def worker(self):
+        self.exit_event.clear()
+        while not self.exit_event.is_set():
+            if self.is_connected():
+                if time() - self.gamepad_last_battery_check_time > self.gamepad_battery_check_rate_seconds:
+                    self.gamepad_last_battery_check_time = time()
+
+                    percent = self.gamepad_inferface.get_battery_percent()
+                    if percent:
+                        self.battery_life_percent = percent
+                        self.battery_life_str = f"{int(percent)}%"
+                        if percent < 20:
+                            self.status = Status.WARNING
+                        else:
+                            self.status = Status.ACTIVE
+                    else:
+                        self.battery_life_str = "N/A"
+                        self.status = Status.ERROR
+
+            else:
+                self.status = Status.STANDBY
+
+            sleep(self.worker_rate_seconds)
+
+    ###############################################################################
+    # Methods
+    ###############################################################################
+
+    def disconnect(self):
+        self.gamepad_inferface.disconnect()
+
+    ###############################################################################
+    # Getters / Setters
+    ###############################################################################
+
+    def get_ik_parameters(self) -> IKParameters:
+        return deepcopy(self.ik_parameters)
+
+    def get_motion_parameters(self) -> MotionParameters:
+        return deepcopy(self.motion_parameters)
+
+    def is_connected(self) -> bool:
+        return self.gamepad_inferface.isConnected()
+
+    def get_status(self) -> Status:
+        return self.status
+    
+    def get_battery_life_percent(self) -> float:
+        return self.battery_life_percent
+
+    def get_battery_life_str(self) -> str:
+        if self.status != Status.ACTIVE:
+            return self.no_battery_life_text
+        else:
+            return self.battery_life_str

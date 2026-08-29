@@ -1,0 +1,129 @@
+import zmq
+from time import sleep, time
+from typing import Callable, Optional
+from threading import Thread, Event
+from dataclasses import dataclass
+from typing import Optional
+from copy import deepcopy
+from queue import Queue
+import json
+
+from input.gamepad_interface import PS4
+from quadruped.interfaces import Status
+from input.interfaces import InputCommand, TouchMessage
+from quadruped.parameters.ik_parameters import IKParameters
+from quadruped.parameters.motion_parameters import MotionParameters
+
+""""
+    Get forwarded touch message from the server.py script as provided by the UI.   
+"""
+
+@dataclass
+class ControlMessage:
+    leftX: float
+    leftY: float
+    rightX: float
+    rightY: float
+    command: InputCommand
+
+class Touch:
+    def __init__(self, command_queue: Queue[InputCommand]):
+        self.command_queue = command_queue
+
+        context = zmq.Context()
+        self.socket = context.socket(zmq.PULL)
+        self.socket.bind("tcp://127.0.0.1:5560")
+
+        self.ik_parameters = IKParameters()
+        self.motion_parameters = MotionParameters()
+
+        self.status: Status = Status.STANDBY
+
+        self.thread_handle = None
+        self.exit_event = Event()
+        self.last_message_time: float = 0
+        self.no_data_timeout_ms: float = 1.0
+        self.message_check_rate_ms: float = 0.010
+
+    ###############################################################################
+    # Queue
+    ###############################################################################
+
+    def _send_command(self, command: InputCommand):
+        self.command_queue.put(command)
+
+    ###############################################################################
+    # Mesage
+    ###############################################################################
+
+    def process_message(self, message_str: str):
+
+        message: TouchMessage = json.loads(message_str)
+
+        # print('[TOUCH] message received from UI: ', message)
+
+        self.ik_parameters.set_roll_by_axis(message.leftX)
+        self.motion_parameters.lateral_velocity = message.leftX
+
+        self.ik_parameters.set_pitch_by_axis(message.leftY)
+        self.motion_parameters.forward_velocity = message.leftY
+
+        self.ik_parameters.set_yaw_by_axis(message.rightX)
+        self.motion_parameters.angular_velocity = message.rightX
+
+        self.ik_parameters.set_height_transition_by_axis(message.rightY)
+                   
+        if message.command != InputCommand.NO_UPDATE:   
+            self._send_command(message.command)
+        
+
+    ###############################################################################
+    # Worker (threaded)
+    ###############################################################################
+
+    def start(self):
+        if not self.thread_handle or not self.thread_handle.is_alive():
+            self.thread_handle = Thread(target=self.worker)
+            self.thread_handle.start()
+
+    def stop(self):       
+        if self.thread_handle and self.thread_handle.is_alive():
+            print('[TOUCH] stopping thread')
+            self.exit_event.set()
+            self.thread_handle.join()
+
+    def worker(self):
+        self.exit_event.clear()
+
+        print(f"[TOUCH] thread starting")
+        while not self.exit_event.is_set():
+            try:
+                message = self.socket.recv_string(flags=zmq.NOBLOCK)
+                self.last_message_time = time()
+                self.status = Status.ACTIVE
+                self.process_message(message)
+            except zmq.Again:
+                if time() - self.last_message_time > self.no_data_timeout_ms:
+                    self.status = Status.STANDBY
+                sleep(self.message_check_rate_ms)
+            except zmq.ZMQError as e:
+                print(f"[TOUCH][ZMQ] error: {e}")
+                self.status = Status.ERROR
+                break
+            except Exception as e:
+                print(f"[TOUCH][ZMQ] unexpected error: {e}")
+                self.status = Status.ERROR
+                break
+
+    ###############################################################################
+    # Getters / Setters
+    ###############################################################################
+
+    def get_ik_parameters(self):
+        return deepcopy(self.ik_parameters)
+
+    def get_motion_parameters(self):
+        return deepcopy(self.motion_parameters)
+
+    def get_status(self):
+        return self.status
