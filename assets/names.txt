@@ -1,0 +1,17 @@
+arc-projection-chart.png
+beizer-control-points-chart.png
+electro-pup-auxiliary-board-v1-render.png
+electro-pup-block-diagram.png
+electro-pup-cad-front-angle.png
+electro-pup-cad-topdown-motor-tags.png
+electro-pup-cad-topdown.png
+electro-pup-can-bus-controller.png
+electro-pup-gamepad-controls.png
+electro-pup-motors-in-zero-position.png
+electro-pup-mujuco-simulation-pose.png
+electro-pup-power-carrier-v1-render.png
+electro-pup-ui-live.png
+electro-pup-ui-sim.png
+electro-pup-wireframe-demo.gif
+electro-pup-zero-motors-script.png
+names.txt
