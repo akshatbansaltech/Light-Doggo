@@ -17,3 +17,10 @@ Thumbs.db
 
 # kicad local history
 .history/
+
+# Generated / build artifacts
+src/src/ui/dist/
+src/src/ui/.yarn/install-state.gz
+src/src/ui/android/.kotlin/
+**/__pycache__/
+*.pyc

@@ -1,4 +1,4 @@
-# Light Doggo
+﻿# Light Doggo
 
 Light Doggo is a DIY quadruped robot using 'low cost' BLDC motors.
 
@@ -43,7 +43,7 @@ The output of `./src/plot/bezier_curve_plot.py`
 
 Rotation is achieved by projecting a linear trajectory onto a curve. The plots are of example projection calculations.
 
-![Arc Projection](assets/arc-projection-chart.png)
+![Arc Projection](assets/beizer-control-points-chart.png)
 
 The output of `./src/plot/projection_plot.py`
 
@@ -85,7 +85,7 @@ Provides direct connection to RPi header for the following breakouts:
 
 * IMU (BNO055 via I2C)
 * 4x contact inputs or GPIO
-* I2S for sound driver (future barks 🐶)
+* I2S for sound driver (future barks ðŸ¶)
 * SBUS to use RC transmitter if BLE gamepad fails in RF congested areas
 
 # Software Architecture
@@ -216,3 +216,4 @@ This is a general improvement list for future updates or revisions.
 # License
 
 This project is licensed under the [MIT License](LICENSE).
+
