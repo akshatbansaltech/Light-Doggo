@@ -85,7 +85,7 @@ Provides direct connection to RPi header for the following breakouts:
 
 * IMU (BNO055 via I2C)
 * 4x contact inputs or GPIO
-* I2S for sound driver (future barks ðŸ¶)
+* I2S for sound driver (future barks)
 * SBUS to use RC transmitter if BLE gamepad fails in RF congested areas
 
 # Software Architecture
@@ -109,7 +109,6 @@ The motors are MG4010E-i10v3 actuators made by LingKong (LKMTECH).
 * gear ratio: 1:10
 * encoders: 18-bit motor, 14-bit reducer
 * size: 53mm diameter, 41mm tall
-* weight: 238 grams
 
 ### MG4010E-i10v3 Pros
 
