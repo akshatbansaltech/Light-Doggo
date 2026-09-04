@@ -204,7 +204,7 @@ This is a general improvement list for future updates or revisions.
 
 This project is licensed under the [MIT License](LICENSE).
 
-#Credits
+# Credits
 
 All the fundings will be allocated by Hack Club.
 Thank you Star Dance and Hack Club for their absolute support while making Light Doggo!
