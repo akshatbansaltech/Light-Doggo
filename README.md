@@ -17,6 +17,10 @@ Light Doggo's control system is coded in Python.
 
 See the docs directory for a setup guide, bill of materials (BOM), 3D printed parts info, and miscellaneous design notes.
 
+# Development Journal
+
+For a detailed development log with images, see [JOURNAL.md](JOURNAL.md).
+
 # UI
 
 The UI shows the status of the entire system: quadruped joint positions, subsystem status, motor information, inputs, sensors, loop times, etc. The above image shows the simulated quadruped overlapped with real quadruped (based on motor feedback).
@@ -24,8 +28,6 @@ The UI shows the status of the entire system: quadruped joint positions, subsyst
 ![ElectroPup UI Simulation](assets/light-doggo-ui-sim.png)
 
 The above image shows a virtual circle the feet follow to walk in a circle and the bezier curves used for moving the feet up and down.
-
-![ElectroPup UI](assets/light-doggo-ui-live.png)
 
 The UI is built from the React Native Framework using Expo and runs on web. The app will run on Android without the plot. The entire system runs in dev mode so you can run the simulation and UI from a development PC without physical hardware.
 
@@ -37,13 +39,9 @@ Inverse kinematics, leg position, and gamepad inputs are verified using the UI.
 
 Bezier curves, sin arcs, and curvature projection are used to generate trajectories. The plots below are examples of control points configurations.
 
-![Bezier Control Points](assets/beizer-control-points-chart.png)
-
 The output of `./src/plot/bezier_curve_plot.py`
 
 Rotation is achieved by projecting a linear trajectory onto a curve. The plots are of example projection calculations.
-
-![Arc Projection](assets/beizer-control-points-chart.png)
 
 The output of `./src/plot/projection_plot.py`
 
@@ -61,13 +59,9 @@ PCBs are designed in KiCad v8(is compatible with KiCad v10 or higher).
 
 ### Power Carrier
 
-![Power Carrier](assets/light-doggo-power-carrier-v1-render.png)
-
 The Power Carrier PCB provides a main on/off power switch and distributes power to the motor headers. The Power Carrier creates four CAN bus networks one for each leg. Solder jumpers allow merging the front two legs into a single network and the back two legs into another single network.
 
 ### Auxiliary Board
-
-![Auxiliary Board](assets/light-doggo-auxiliary-board-v1-render.png)
 
 The auxiliary board is optional and not required for the quadruped to operate.
 
@@ -89,8 +83,6 @@ Provides direct connection to RPi header for the following breakouts:
 * SBUS to use RC transmitter if BLE gamepad fails in RF congested areas
 
 # Software Architecture
-
-![Software Architecture](assets/light-doggo-block-diagram.png)
 
 Electropup's software architecture was purposely designed to be simple and to bypass the pain points of using ROS2. A major downside of this single service architecture is needing to sit and stand the quadruped on every software change vs being able to restart individual services quickly without affecting others (i.e. the motors). However, with the simulated quadruped and UI, most development is not performed on a live quadruped.
 
@@ -152,8 +144,6 @@ Each CAN controller drives six motors with an average motor update rate of ~70 H
 
 # Gamepad
 
-![Gamepad Controls](assets/light-doggo-wireframe-demo.gif)
-
 ElectroPup was coded with a PS4 controller in mind, however xBox, PS5, Logitech gamepads may be used with minor software modifications.
 
 # Environment and IDEs
@@ -179,8 +169,6 @@ An STM32F401 Black Pill dev kit operates the auxiliary board to display the moto
 Uses VSCode with PlatformIO on the PC/Laptop for development.
 
 # CAD
-
-![ElectroPup CAD](assets/light-doggo-cad-front-angle.png)
 
 Parts are modeled using OnShape which provides free web-based full access for non-commercial use. The links below should have export permissions to allow copying the workspace.
 
