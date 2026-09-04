@@ -1,157 +1,281 @@
-# Light Doggo - Development Journal
+# Light Doggo — Development Journal
 
-## August 21: Day 0 - Research and finding inspiration
+## August 21: Day 0 — Research and finding inspiration
 
-ok so i've been obsessing over quadruped robots for weeks now. finally decided to actually do something about it. spent the entire day just watching youtube videos and reading hackaday posts about other people's builds. the goal is simple - make a walking robot that doesn't cost a fortune.
+ok, i've been obsessed with quadruped robots for the past few weeks, so today i finally decided to stop just watching videos and actually start building one.
 
-went down a massive rabbit hole looking at:
-- what motors to use (BLDC vs servo vs steppers)
-- what brain to run it (Raspberry Pi vs ESP32 vs STM32)
-- how to talk to the motors (CAN bus seemed like the move)
-- who's already done this before
+spent basically the whole day going down rabbit holes on YouTube, GitHub, Hackaday, etc. I was trying to figure out what motors people were using, how they were controlling them, and what would actually be realistic for a project that i could afford.
 
-found some cool projects for inspiration:
-- Stanford Pupper - sick leg kinematics but way too expensive
-- SpotMicro - open source Spot clone but uses servos which ain't it
-- random chinese BLDC projects on github that showed CAN bus working
+some of the main things i looked into:
 
-the game changer was finding these LingKong MG4010E motors on AliExpress. $35 each, 2.5 N.m torque, CAN bus at 1Mbps, and they come with encoders. 12 of them is $420 which is actually reasonable for a 12-DOF quadruped.
+* BLDC vs servo vs stepper motors
+* Raspberry Pi vs ESP32 vs STM32
+* CAN bus for motor communication
+* existing open-source quadruped projects
+* how other people were doing the leg kinematics
 
-also realized the Raspberry Pi 5 is beefy enough to handle real-time motor control without needing a separate RTOS. that simplified everything.
+Stanford Pupper was one of the first projects i looked at. The kinematics and overall design are really cool, but the cost is way beyond what i wanted to spend.
 
-by the end of the day i had a plan:
-- RPi 5 as the brain
-- 12 BLDC motors with CAN bus
-- custom PCBs for power and aux stuff
-- Python for control code
-- MuJoCo for simulation
+then there was SpotMicro, which is much more accessible and open source, but it uses servos. I really wanted to try BLDC motors instead.
 
-couldn't find my inspo image in downloads but the vision was clear - budget quadruped that actually works.
+eventually i found the LingKong MG4010E motors on AliExpress. They have encoders, CAN communication at 1 Mbps, and around 2.5 N·m of torque. They're about $35 each, so 12 of them would come out to roughly $420.
 
-Time spent this session: 8 hours
+that's still a lot of money, but honestly not terrible for a 12-DOF quadruped.
+
+for the controller, i decided to go with a Raspberry Pi 5. It's definitely overkill in some ways, but having enough processing power for the control software, UI, simulation, etc. without adding another computer seemed worth it.
+
+by the end of the day, the rough plan was:
+
+* Raspberry Pi 5 as the main computer
+* 12 BLDC motors
+* CAN bus
+* custom PCBs
+* Python for the control software
+* MuJoCo for simulation
+
+I couldn't find the exact image that originally inspired me, but at this point i had a pretty clear idea of what i wanted to build.
+
+**Time spent: 8 hours**
 
 ---
 
 ## August 22: Repo setup and renaming everything
 
-finally created the github repo and started pulling files from the upstream project i was basing this on. it was originally a micromouse project - completely different from what i needed. but the KiCad files, firmware structure, and simulation setup were solid starting points.
+today was mostly GitHub/repo cleanup.
 
-the hard part was figuring out what to keep and what to delete. the upstream had a bunch of maze-solving stuff - wheel encoders, line sensors - all useless for a quadruped. but the CAN bus code? the motor driver structure? that was gold.
+I found an existing project that had some really useful stuff in it, especially the KiCad files, firmware structure and CAN bus code. The problem was that it was originally made for a micromouse, so a huge amount of it had absolutely nothing to do with a quadruped.
 
-```
+basically:
+
+```text
 git clone upstream-repo
-# realize it's 80% useless code
-# spend 2 hours just deleting things
+# look through everything
+# realise most of it is useless
+# delete a ridiculous amount of stuff
 # rename everything
 ```
 
-ended up with this folder structure:
-- `firmware/auxillary` - STM32 code for the LCD board
-- `pcbs` - KiCad projects for both boards
-- `cad` - OnShape exports and STL files
-- `src/src` - main Python control code and simulation
-- `docs` - GitHub Pages site
+the maze-solving code, wheel encoders, line sensors, etc. obviously had to go. But the CAN communication code and some of the motor-driver structure were actually really useful.
 
-still can't believe i almost didn't use an upstream project. would've taken forever to write the CAN bus protocol from scratch.
+I probably spent way too long deciding what to keep.
+
+eventually i ended up with something roughly like:
+
+* `firmware/auxillary` — STM32 code for the LCD/auxiliary board
+* `pcbs` — KiCad projects
+* `cad` — OnShape exports and STLs
+* `src/src` — Python control code and simulation
+* `docs` — GitHub Pages documentation
+
+using an existing project definitely saved me a lot of time. Writing the entire CAN communication layer from scratch would have been painful.
 
 ![Initial CAD render](assets/light-doggo-cad-front-angle.png)
 
-Time spent this session: 6 hours
+**Time spent: 6 hours**
 
 ---
 
-## August 23: Documentation and CAD design
+## August 23: Documentation and CAD
 
-ok so i needed to write a proper README before i forgot all the technical details. started with the basics - RPi 5, 12x BLDC motors, 6s Li-Ion battery, 9-axis IMU - then got sucked into documenting the whole software architecture.
+today i realised that if i didn't start documenting things now, i'd probably forget why i made half of the decisions in the first place.
 
-the architecture diagram took forever in Drawio but it's honestly one of the most useful things in the repo. shows how the main Python service talks to the CAN bus controller, which talks to the 12 motors across 4 separate CAN networks. each leg gets its own network which is overkill but keeps things clean.
+started writing the README and documenting the basic hardware:
 
-spent the afternoon in OnShape modeling the frame and legs. the body is basically two parallel plates with mounting points for the RPi, battery, and all the electronics. tricky part was making everything fit while keeping the center of mass low.
+* Raspberry Pi 5
+* 12 × BLDC motors
+* 6S Li-Ion battery
+* 9-axis IMU
 
-the legs were the real pain. each leg has 3 DOF - hip abduction/adduction, hip flexion/extension, and knee flexion/extension. had to design mounting brackets so the motors align perfectly with the joint axes. used the motor dimensions from the MG4010E datasheet and made custom brackets that bolt directly to the motor face.
+then somehow the README turned into documenting basically the entire software architecture.
+
+I also made the architecture diagram in Draw.io. It took much longer than i expected, but it actually helped me understand how everything was supposed to fit together.
+
+the current setup has the Python control software talking to the CAN controller, which then communicates with the motors. I'm using four separate CAN networks, basically one per leg. It's probably more complicated than strictly necessary, but it makes things easier to organise.
+
+after that i spent most of the afternoon working on the CAD in OnShape.
+
+the body is basically two plates with mounting points for the Raspberry Pi, battery and electronics. One of the annoying parts was trying to keep everything compact while also keeping the centre of mass reasonably low.
+
+the legs took even longer.
+
+each leg has 3 DOF:
+
+* hip abduction/adduction
+* hip flexion/extension
+* knee flexion/extension
+
+I had to make custom motor brackets so that the motor axes lined up properly with the joint axes. I used the dimensions from the MG4010E datasheet for this.
+
+it's starting to actually look like a robot now, which is pretty satisfying.
 
 ![Software architecture diagram](assets/light-doggo-block-diagram.png)
 
-Time spent this session: 8 hours
+**Time spent: 8 hours**
 
 ---
 
-## August 24: PCBs are finally done (maybe)
+## August 24: PCBs are finally done (hopefully)
 
-the Power Carrier board went through like 4 revisions before i was happy. main challenge was routing power to 12 motors while also creating 4 separate CAN bus networks. used solder jumpers so you can merge the front two legs into one network and the back two into another if you want to save on CAN channels.
+the Power Carrier board went through about four revisions today.
 
-the auxiliary board was even worse. originally planned to use the STM32 for everything - motor control, LCD, buzzer, neopixels. but then i realized the RPi 5 has enough GPIO and I2C pins to handle most of it directly. the only thing the STM32 really needs to do is the LCD driver since it's got that nice I2S interface.
+the main headache was figuring out how to route power for 12 motors while also fitting four CAN networks onto the board.
 
-lesson learned: just because you CAN use a separate microcontroller doesn't mean you SHOULD. extra chip = extra firmware = extra headaches.
+I added solder jumpers so that the CAN networks can be combined in different ways. That way, if i don't need all four CAN channels, i can merge some of them instead.
+
+not sure if i'll actually need that flexibility, but i'd rather have the option now than redesign the board later.
+
+the auxiliary board was another story.
+
+originally i thought i'd use an STM32 for basically everything — motor control, LCD, buzzer, neopixels, etc.
+
+then i looked at the Raspberry Pi 5 GPIO/I2C situation again and realised i was making things unnecessarily complicated.
+
+most of that stuff can just be handled directly by the Pi.
+
+so now the STM32 mostly exists to handle the LCD and a few auxiliary functions.
+
+kind of an important lesson from today:
+
+just because i *can* add another microcontroller doesn't mean i should.
+
+one more chip means another firmware project, another communication interface, another thing that can break, and another thing i have to debug.
 
 ![Power carrier PCB render](assets/light-doggo-power-carrier-v1-render.png)
 
-Time spent this session: 7 hours
+**Time spent: 7 hours**
 
 ---
 
-## August 25: KINEMATICS WORK IN SIMULATION!!
+## August 25: KINEMATICS ACTUALLY WORK
 
-ok this was the big one. got the inverse kinematics running in MuJoCo and it actually looks like a dog walking?? still can't believe it.
+today was probably the most satisfying day so far.
 
-the approach is pretty standard for quadrupeds - each leg has 3 joints (hip, knee, ankle) and you use inverse kinematics to figure out what angle each joint needs to be at to put the foot where you want it. the tricky part is generating the foot trajectories.
+I finally got the inverse kinematics working in MuJoCo.
 
-for walking in a straight line, i'm using Bezier curves to move each foot in a smooth arc. the control points define how high the foot lifts and how far forward it reaches. for turning, i project the linear trajectory onto a curved path using curvature projection. basically you take the straight-line trajectory and "bend" it around a circle.
+and somehow... it actually looks like a dog walking.
 
-the simulation started out... not great. the quadruped was bouncing around like crazy because i hadn't set the masses or inertial properties in the MuJoCo XML file. just used placeholder values. eventually got it stable enough to at least stand up and take a few steps.
+the basic idea is that each leg has three joints, and the inverse kinematics calculates what angles those joints need to be at to put the foot at a particular position.
 
-the real validation came from overlaying the simulated quadruped on top of the real motor feedback in the UI. when the simulation matches the real thing, you know your kinematics are right.
+the difficult part was getting the foot trajectory right.
+
+for straight-line walking i'm using Bezier curves. The control points basically determine how far forward the foot moves and how high it lifts during the swing.
+
+for turning, i'm projecting the normal trajectory onto a curved path. In simple terms, i'm taking the straight walking path and bending it around a circle.
+
+the first version of the simulation was terrible.
+
+the robot was basically bouncing everywhere because i hadn't properly set the masses and inertial properties in the MuJoCo XML. I was using placeholder values, which turned out to be a pretty bad idea.
+
+after fixing those values, things got considerably better. It's still nowhere near perfect, but it can stand and take a few steps without completely losing its mind.
+
+one of the things i really want is to compare the simulated robot with the actual motor feedback. If the simulation and real robot line up, it'll give me a lot more confidence that the kinematics and control code are correct.
 
 ![Bezier curve control points](assets/beizer-control-points-chart.png)
 
-Time spent this session: 8 hours
+**Time spent: 8 hours**
 
 ---
 
-## August 26: UI is actually usable now
+## August 26: The UI is finally useful
 
-got the React Native UI to the point where it's actually useful for debugging and development. the UI shows everything - joint positions, motor currents, sensor data, loop times, gamepad inputs - all in real time.
+the UI is finally at the point where i can actually use it for debugging instead of just looking pretty.
 
-the coolest feature is the 3D visualization that shows both the simulated quadruped and the real motor feedback overlapped. you can literally see if your control code is making the robot do what you think it's doing.
+it's built with React Native + Expo and currently shows:
 
-built it with Expo so it runs on web during development (no need to deploy to a phone every time you change something). it'll also run on Android but without the 3D plot since WebGL support is spotty.
+* joint positions
+* motor currents
+* sensor data
+* control-loop timing
+* gamepad inputs
+* motor feedback
 
-the hardest part was getting the WebSocket connection stable between the UI and the main Python service. kept dropping connections when too much data was flowing. ended up throttling the motor feedback to 50Hz instead of trying to push all 12 motors at full speed.
+the coolest part is probably the 3D visualisation.
+
+I can display the simulated quadruped and the real motor feedback at the same time, so i can actually see whether the robot is doing what the control software thinks it's doing.
+
+I initially wanted to push all the motor feedback at full speed, but that made the WebSocket connection pretty unhappy.
+
+connections kept dropping whenever too much data was being sent.
+
+eventually i throttled the motor feedback to around 50 Hz. That seems to be a much better compromise.
+
+the app runs on the web through Expo while i'm developing, which is really convenient because i don't have to keep deploying it to my phone every time i change something.
+
+Android will work too, although the 3D visualisation is limited because WebGL support isn't as nice there.
 
 ![Live UI with motor data](assets/light-doggo-ui-live.png)
 
-Time spent this session: 6 hours
+**Time spent: 6 hours**
 
 ---
 
-## August 27: Firmware and website launch
+## August 27: Firmware and website
 
-got the STM32 firmware compiling and running on the Black Pill dev kit. the auxiliary board powers the RPi, drives the LCD display, controls the buzzer, and handles the neopixel strips.
+today was mostly firmware.
 
-the LCD driver was the main challenge. it's an SPI display and the STM32's HAL library makes it really easy to write raw SPI commands but the initialization sequence for the LCD controller is like 50 lines of register writes. found a reference implementation in an Adafruit library and adapted it.
+got the STM32 firmware compiling and running on the Black Pill dev board.
 
-the buzzer was fun - it's just a simple PWM output but i added variable pitch so it can play different tones. eventually want to add "bark" sounds but for now it just beeps.
+the auxiliary board is responsible for things like:
 
-also set up GitHub Pages to host the project documentation and created the BOM.csv with all the parts and costs. total cost is somewhere around $700 which is honestly not bad for a 12-DOF quadruped.
+* powering the Raspberry Pi
+* LCD
+* buzzer
+* neopixels
+
+the LCD was probably the most annoying part.
+
+it's an SPI display, so actually sending data isn't too difficult. The annoying part was the initialisation sequence. There are a bunch of register writes that have to happen in the right order before the display actually works.
+
+I found a reference implementation in an Adafruit library and adapted it instead of trying to figure out the entire LCD controller from scratch.
+
+the buzzer was much easier. It's just PWM, although i added variable pitch so it can play different tones.
+
+eventually i'd like to make it do some kind of bark sound because obviously a robot dog needs to bark.
+
+also got the GitHub Pages site set up and added the BOM.
+
+the current estimated cost is around $700 for the whole robot.
+
+that's definitely not cheap, but considering it's a 12-DOF quadruped with custom PCBs, BLDC motors, sensors and a Raspberry Pi, i'm pretty happy with it.
 
 ![Auxiliary board render](assets/light-doggo-auxiliary-board-v1-render.png)
 
-Time spent this session: 7 hours
+**Time spent: 7 hours**
 
 ---
 
-## August 28: License, cleanup, and final polish
+## August 28: Cleanup and final polish
 
-made the decision to switch from Apache 2.0 to MIT. main reason is simplicity - MIT is just one paragraph and everyone knows what it means. Apache 2.0 has all this extra stuff about patents and contributions that honestly doesn't matter for a small personal project.
+today was mostly boring stuff, but necessary boring stuff.
 
-the switch required deleting the old LICENSE file, creating a new one, and updating all the references in the README and documentation. also found some character encoding issues in the README that were causing weird rendering on GitHub - turns out i had some UTF-8 smart quotes that needed to be regular ASCII quotes.
+first, i switched the project license from Apache 2.0 to MIT.
 
-spent the rest of the day cleaning up generated files and build artifacts that had somehow snuck into the repo. KiCad generates a ton of backup files and fabrication outputs that definitely shouldn't be in version control.
+the main reason was just simplicity. For a small personal open-source project, MIT seemed easier to understand and maintain.
 
-added the last few documentation sections - motor calibration process, gamepad controls, and the wireframe demo GIF. the motor calibration script (zero-motors.py) is actually really useful. it connects to each motor over CAN, reads the current encoder position, and lets you set the zero offset.
+then i cleaned up the README and fixed some weird character encoding problems that were making some things render incorrectly on GitHub.
 
-also added the wireframe demo GIF that shows the quadruped walking in a circle. it's just the simulation output but it looks cool and gives people an idea of what the project does.
+also discovered that KiCad had dumped a bunch of backup files and other generated files into the repo.
+
+so yeah, spent a while cleaning those up and adding things to `.gitignore`.
+
+I also finished a few documentation sections:
+
+* motor calibration
+* gamepad controls
+* wiring
+* setup instructions
+* demo
+
+the motor calibration script, `zero-motors.py`, is probably one of the more useful little tools in the repo. It connects to the motors over CAN, reads their current encoder positions and lets me set their zero offsets.
+
+finally added the wireframe demo GIF too.
+
+it's only the simulation walking in a circle, but honestly it looks pretty cool.
 
 ![Wireframe demo](assets/light-doggo-wireframe-demo.gif)
 
-Time spent this session: 6 hours
+and that's basically the first development sprint done.
+
+there's still a ridiculous amount left to do — especially getting the real robot walking reliably — but at least at this point Light Doggo isn't just an idea and some CAD files anymore.
+
+**Time spent: 6 hours**
